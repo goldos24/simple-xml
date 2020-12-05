@@ -556,6 +556,29 @@ namespace gxml
             return out << e.toString();
         }
 
+        const std::vector<Element>& getSubElements() const
+        {
+            if (bIsText)
+                throw std::runtime_error("Tried to get SubElems of a text");
+            return this->sub_elements;
+        }
+
+        bool isText() const { return bIsText; }
+
+        const std::string& getTagname() const
+        {
+            if(bIsText)
+                throw std::runtime_error("Tried to get Tagname of a text");
+            return elementTypename;
+        }
+
+        const std::map<std::string, std::string>& getAttributes() const
+        {
+            if (bIsText)
+                throw std::runtime_error("Tried to get Attributes of a text");
+            return attributes;
+        }
+
     private:
 
         std::vector<Element> sub_elements;
