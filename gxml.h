@@ -2,6 +2,7 @@
 #include <iostream>
 #include <functional>
 #include <cctype>
+#include <cstdint>
 #include <map>
 #include <vector>
 #include <sstream>
@@ -91,7 +92,7 @@ namespace gxml
             if (this->content.size() == 0)
                 return false;
 
-            return isalnum(this->content.at(0));
+            return isalnum((uint8_t)this->content.at(0));
         }
 
         inline friend std::ostream& operator<<(std::ostream& out_stream, Token tok)
@@ -104,7 +105,7 @@ namespace gxml
             if (this->content.size() != 1)
                 return false;
 
-            return isspace(this->content.at(0));
+            return isspace((uint8_t)this->content.at(0));
         }
 
     private:
@@ -138,7 +139,7 @@ namespace gxml
                 char c = c_getter.peek();
 
 
-                if (isalnum(c))
+                if (isalnum((uint8_t)c))
                 {
                     result_content += c;
                 }
