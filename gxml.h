@@ -536,7 +536,7 @@ namespace gxml
 
             for (auto attr : this->attributes)
             {
-                result << " " << attr.first << "=" << '"' << attr.second;
+                result << " " << attr.first << "=" << '"' << attr.second << '"';
             }
 
             result << ">";
