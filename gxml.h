@@ -579,6 +579,13 @@ namespace gxml
             return attributes;
         }
 
+        const std::string& getTextContent() const
+        {
+            if (!bIsText)
+                throw std::runtime_error("Tried to get text content of a non-text");
+            return attributes.at("_textcnt");
+        }
+
     private:
 
         std::vector<Element> sub_elements;
