@@ -340,6 +340,11 @@ namespace gxml
 
         }
 
+        inline void unloadCurrentTag()
+        {
+            this->currentTag = Tag(); // Replacing current tag with empty tag
+        }
+
     private:
 
         inline void parseText()
@@ -610,7 +615,7 @@ namespace gxml
             return Element(firstTag);
         }
 
-        tagStream.loadNextTag();
+        tagStream.unloadCurrentTag();
 
         auto sub_elems = getSubElems(tagStream, firstTag.getTagTypename());
 
