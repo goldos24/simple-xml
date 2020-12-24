@@ -19,7 +19,8 @@ namespace gxml
         inline CharGetter(std::function<bool()> hasNext, std::function<char()> next)
             :
             funcHasNext(hasNext),
-            funcNext(next)
+            funcNext(next),
+            anyCharLoaded(true)
         {
             c = 0;
             bHasNext = 0;
@@ -42,13 +43,22 @@ namespace gxml
                 return;
             }
 
+            anyCharLoaded = true;
             c = funcNext.operator()();
             bHasNext = funcHasNext.operator()();
         }
 
         inline auto peek() -> char
         {
+            if (!anyCharLoaded)
+                loadNextChar();
+
             return this->c;
+        }
+
+        inline void unloadCurrentChar()
+        {
+            anyCharLoaded = false;
         }
 
         inline auto hasNext() -> bool
@@ -61,7 +71,7 @@ namespace gxml
         std::function<bool()> funcHasNext;
         std::function<char()> funcNext;
         char c;
-        bool bHasNext;
+        bool bHasNext, anyCharLoaded;
     };
 
     class Token
@@ -131,6 +141,7 @@ namespace gxml
 
         inline void loadNextToken()
         {
+            this->anyTokenLoaded = true;
             std::string result_content;
 
             bool isTokenContinuing = true;
@@ -158,7 +169,7 @@ namespace gxml
 
                 if (c_getter.hasNext())
                 {
-                    c_getter.loadNextChar();
+                    c_getter.unloadCurrentChar();
                 }
                 else
                 {
@@ -171,6 +182,11 @@ namespace gxml
             this->currentToken = Token(result_content);
         }
 
+        inline void unloadCurrentToken()
+        {
+            this->anyTokenLoaded = false;
+        }
+
         inline bool hasNextToken()
         {
             return c_getter.hasNext() || !alreadyGotLastChar;
@@ -178,12 +194,15 @@ namespace gxml
 
         inline Token peek()
         {
+            if (!anyTokenLoaded)
+                loadNextToken();
+
             return this->currentToken;
         }
 
     private:
 
-        bool alreadyGotLastChar = false;
+        bool alreadyGotLastChar = false, anyTokenLoaded = true;
         Token currentToken;
         CharGetter c_getter;
 
@@ -492,7 +511,7 @@ namespace gxml
             if (!hasNextTag())
                 throw std::runtime_error("Tried to load out of bounds token while creating the tags");
 
-            tokenizer.loadNextToken();
+            tokenizer.unloadCurrentToken();
             if (!tokenizer.hasNextToken())
             {
                 alreadyConsumedLastToken = true;
