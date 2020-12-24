@@ -634,9 +634,11 @@ namespace gxml
             return Element(firstTag);
         }
 
-        tagStream.unloadCurrentTag();
+        tagStream.loadNextTag();
 
         auto sub_elems = getSubElems(tagStream, firstTag.getTagTypename());
+
+        tagStream.unloadCurrentTag();
 
         return Element(firstTag, sub_elems);
     }
