@@ -28,8 +28,7 @@ namespace gxml
 
             if (!hasNext())
             {
-                std::cerr << "No Characters to parse" << std::endl;
-                return;
+                throw std::runtime_error("No Characters to parse");
             }
 
             this->loadNextChar();
@@ -39,8 +38,7 @@ namespace gxml
         {
             if (!funcHasNext())
             {
-                std::cerr << "No Characters to parse" << std::endl;
-                return;
+                throw std::runtime_error("No Characters to parse");
             }
 
             anyCharLoaded = true;
